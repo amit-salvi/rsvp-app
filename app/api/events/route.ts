@@ -17,12 +17,14 @@ export async function POST(req: Request) {
     const timezone = String(body.timezone ?? "Europe/London").trim();
     const location = String(body.location ?? "").trim();
     const hostName = String(body.hostName ?? "").trim();
+    const hostEmail = String(body.hostEmail ?? "").trim();
 
     if (!title) return NextResponse.json({ error: "Title is required" }, { status: 400 });
     if (!startTimeLocal) return NextResponse.json({ error: "Date/time is required" }, { status: 400 });
 
     const slug = nanoid(7);
     const manageKey = nanoid(32);
+    
 
     const { data, error } = await supabaseAnon
       .from("events")
@@ -34,6 +36,7 @@ export async function POST(req: Request) {
         timezone,
         location,
         host_name: hostName,
+        host_email: hostEmail || null,
         manage_key: manageKey,
       })
       .select("slug, manage_key")

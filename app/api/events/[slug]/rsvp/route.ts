@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabaseAnon } from "@/lib/supabase";
+import { supabaseAnon, supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(
   req: Request,
@@ -10,10 +10,21 @@ export async function POST(
 
     const body = await req.json();
     const guestName = String(body.guestName ?? "").trim();
+    const guestEmailRaw = String(body.guestEmail ?? "").trim();
+    const guestEmail = guestEmailRaw ? guestEmailRaw.toLowerCase() : "";
     const status = String(body.status ?? "").trim().toUpperCase();
     const note = String(body.note ?? "").trim();
 
-    if (!guestName) return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    if (!guestName)
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
+
+    // Make email required to prevent duplicates
+    if (!guestEmail)
+      return NextResponse.json(
+        { error: "Email is required to avoid duplicates" },
+        { status: 400 }
+      );
+
     if (!["YES", "NO", "MAYBE"].includes(status))
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });
 
@@ -23,14 +34,24 @@ export async function POST(
       .eq("slug", slug)
       .single();
 
-    if (eventErr || !event) return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    if (eventErr || !event)
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
 
-    const { error } = await supabaseAnon.from("rsvps").insert({
-      event_id: event.id,
-      guest_name: guestName,
-      status,
-      note: note || null,
-    });
+    console.log("RSVP Payload:", body, "event id:", event.id);
+
+    // Upsert: same (event_id, guest_email) updates instead of creating duplicates
+    const { error } = await supabaseAdmin
+      .from("rsvps")
+      .upsert(
+        {
+          event_id: event.id,
+          guest_name: guestName,
+          guest_email: guestEmail,
+          status,
+          note: note || null,
+        },
+        { onConflict: "event_id,guest_email" }
+      );
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 

@@ -119,6 +119,16 @@ export default function CreatePage() {
            dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:ring-white/20"
               />
             </Field>
+
+            <Field label="Host email" hint="Optional (useful for future summaries)">
+              <input
+                name="hostEmail"
+                type="email"
+                className="mt-1 w-full rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-black/20"
+                placeholder="you@example.com"
+              />
+            </Field>
+
           </div>
 
           {err && (

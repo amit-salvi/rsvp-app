@@ -24,6 +24,8 @@ export default function EventClient({ slug, manageKey }: { slug: string; manageK
     const [note, setNote] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [guestEmail, setGuestEmail] = useState("");
+
 
     const shareUrl = useMemo(() => {
         if (typeof window === "undefined") return "";
@@ -52,7 +54,7 @@ export default function EventClient({ slug, manageKey }: { slug: string; manageK
         const res = await fetch(`/api/events/${slug}/rsvp`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ guestName, status, note }),
+            body: JSON.stringify({ guestName, guestEmail, status, note }),
         });
 
         const data = await res.json();
@@ -65,6 +67,7 @@ export default function EventClient({ slug, manageKey }: { slug: string; manageK
         setGuestName("");
         setNote("");
         setStatus("YES");
+        setGuestEmail("");
     }
 
     if (loading) return <main className="mx-auto max-w-2xl space-y-6 p-6">Loading...</main>;
@@ -124,6 +127,23 @@ export default function EventClient({ slug, manageKey }: { slug: string; manageK
            focus:outline-none focus:ring-2 focus:ring-black/20
            dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:ring-white/20" value={guestName} onChange={(e) => setGuestName(e.target.value)} required />
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium">Your email</label>
+                        <input
+                            type="email"
+                            className="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 placeholder:text-gray-400
+           focus:outline-none focus:ring-2 focus:ring-black/20
+           dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:ring-white/20"
+                            value={guestEmail}
+                            onChange={(e) => setGuestEmail(e.target.value)}
+                            required
+                            placeholder="name@example.com"
+                        />
+                        <p className="mt-1 text-xs text-gray-500">
+                            We use this to prevent duplicate RSVPs.
+                        </p>
+                    </div>
+
 
                     <div>
                         <label className="block text-sm font-medium">Response</label>
