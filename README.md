@@ -30,6 +30,10 @@ A full-stack event sharing platform where users can:
 - RSVP editing
 - Deployment to Vercel
 
+## Live Demo
+https://rsvp-app-v1.vercel.app/
+
+
 ---
 
 Built as a hands-on exploration of AI-assisted development and modern full-stack architecture.
