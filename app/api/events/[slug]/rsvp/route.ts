@@ -14,7 +14,9 @@ export async function POST(
     const guestEmail = guestEmailRaw ? guestEmailRaw.toLowerCase() : "";
     const status = String(body.status ?? "").trim().toUpperCase();
     const note = String(body.note ?? "").trim();
-
+    const numGuests = Number(body.numGuests ?? 0);
+    const numUnder5 = Number(body.numUnder5 ?? 0);
+    
     if (!guestName)
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
 
@@ -49,6 +51,8 @@ export async function POST(
           guest_email: guestEmail,
           status,
           note: note || null,
+          num_guests: numGuests,
+          num_under5: numUnder5,
         },
         { onConflict: "event_id,guest_email" }
       );

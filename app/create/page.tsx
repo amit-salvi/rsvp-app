@@ -8,17 +8,22 @@ export default function CreatePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErr(null);
     setLoading(true);
 
+    // Build startTimeLocal from date and time
+    const startTimeLocal = `${date}T${time}`;
+
     const form = new FormData(e.currentTarget);
     const payload = {
       title: form.get("title"),
       description: form.get("description"),
-      startTimeLocal: form.get("startTimeLocal"),
+      startTimeLocal,
       timezone: form.get("timezone"),
       location: form.get("location"),
       hostName: form.get("hostName"),
@@ -47,7 +52,7 @@ export default function CreatePage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Create an event</h1>
           <p className="mt-1 text-gray-600">
-            Fill in the basics — you can share the link right after.
+            Fill in the basics 1 you can share the link right after.
           </p>
         </div>
 
@@ -79,10 +84,25 @@ export default function CreatePage() {
           </Field>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Date & time" hint="Local time">
+            <Field label="Date" hint="Local date">
               <input
-                name="startTimeLocal"
-                type="datetime-local"
+                name="date"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 placeholder:text-gray-400
+           focus:outline-none focus:ring-2 focus:ring-black/20
+           dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:ring-white/20"
+                required
+              />
+            </Field>
+
+            <Field label="Time" hint="Local time">
+              <input
+                name="time"
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
                 className="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 placeholder:text-gray-400
            focus:outline-none focus:ring-2 focus:ring-black/20
            dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:ring-white/20"
@@ -145,7 +165,7 @@ export default function CreatePage() {
           </button>
 
           <p className="text-center text-xs text-gray-500">
-            You’ll get a share link and a host-only manage link next.
+            You9ll get a share link and a host-only manage link next.
           </p>
         </form>
       </div>

@@ -23,7 +23,7 @@ export async function GET(
 
   const { data: rsvps, error } = await supabaseAdmin
     .from("rsvps")
-    .select("id, guest_name, status, note, created_at")
+    .select("id, guest_name, guest_email, status, note, num_guests, num_under5, created_at")
     .eq("event_id", event.id)
     .order("created_at", { ascending: false });
 

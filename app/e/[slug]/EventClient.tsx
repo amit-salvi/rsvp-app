@@ -25,7 +25,8 @@ export default function EventClient({ slug, manageKey }: { slug: string; manageK
     const [submitted, setSubmitted] = useState(false);
     const [copied, setCopied] = useState(false);
     const [guestEmail, setGuestEmail] = useState("");
-
+    const [numGuests, setNumGuests] = useState(0);
+    const [numUnder5, setNumUnder5] = useState(0);
 
     const shareUrl = useMemo(() => {
         if (typeof window === "undefined") return "";
@@ -68,6 +69,8 @@ export default function EventClient({ slug, manageKey }: { slug: string; manageK
         setNote("");
         setStatus("YES");
         setGuestEmail("");
+        setNumGuests(0);
+        setNumUnder5(0);
     }
 
     if (loading) return <main className="mx-auto max-w-2xl space-y-6 p-6">Loading...</main>;
@@ -142,6 +145,33 @@ export default function EventClient({ slug, manageKey }: { slug: string; manageK
                         <p className="mt-1 text-xs text-gray-500">
                             We use this to prevent duplicate RSVPs.
                         </p>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium">Number of guests (excluding yourself)</label>
+                        <input
+                            type="number"
+                            min={0}
+                            className="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 placeholder:text-gray-400
+           focus:outline-none focus:ring-2 focus:ring-black/20
+           dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:ring-white/20"
+                            value={numGuests}
+                            onChange={e => setNumGuests(Number(e.target.value))}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium">Number of guests under age 5</label>
+                        <input
+                            type="number"
+                            min={0}
+                            className="mt-1 w-full rounded-md border border-gray-300 bg-white p-2 text-gray-900 placeholder:text-gray-400
+           focus:outline-none focus:ring-2 focus:ring-black/20
+           dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:ring-white/20"
+                            value={numUnder5}
+                            onChange={e => setNumUnder5(Number(e.target.value))}
+                            required
+                        />
                     </div>
 
 
