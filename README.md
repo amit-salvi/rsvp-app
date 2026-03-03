@@ -31,7 +31,7 @@ A full-stack event sharing platform where users can:
 - Deployment to Vercel
 
 ## Live Demo
-https://rsvp-app-v1.vercel.app/
+[https://rsvp-app-v1.vercel.app/](https://rsvp-app-smoky.vercel.app/)
 
 
 ---
